@@ -1,0 +1,552 @@
+<body onKeyUp="keyUp(event)" onKeyDown="keyDown(event)" ><audio id="soundEfx" src="../Overworld.mp3" style="display: none;"></audio></body>
+
+<canvas id="gameCanvas" style="border:2px solid black; position:absolute; top:0; left:0; background-color:orange;" width="600" height="600"></canvas>
+
+<script>
+//Varriables
+var fps=60;
+var gameCanvas = document.getElementById('gameCanvas');
+var grafx = gameCanvas.getContext('2d');
+gameCanvas.addEventListener("mousedown", getPosition, false);
+gameCanvas.addEventListener("mousedown", getPosition, false);
+var isLeft=false;
+var isRight=false;
+var isSpace = false;
+
+var soundEfx = document.getElementById("soundEfx");
+
+
+var loser = false;
+
+var winner = false;
+var BounceCount = 0;
+
+var snum = 1;
+var g;
+var number = 0;
+var maxBlocks = 90;
+var lives = 400;
+var maxLava = 26;
+
+var startScreen = true;
+
+
+var block = new Array();
+var lava = new Array();
+
+var win = new Object("win.png",0,0,600,600);
+var welcome = new Object("welcome.jpg",0,0,600,600);
+var background = new Object("background.png",0,0,2800,600);
+var star = new Object("star.png",3000,350,50,50);
+var player = new Object("mario-sprite.png",100,100,40,40);
+var lose = new Object("lose.png",0,0,600,600);
+
+
+
+
+
+for(i=1;i<=maxLava;i++){
+lava[i]=new Object("lava.png",i*20,280,20,20);
+}
+
+
+for(var i=1; i<=maxBlocks; i++){
+	block[i] = new Object("block.png",i*60,400,60,60);
+}
+
+block[6] = new Object("block.png", 200,200,60,60);
+block[7] = new Object("block.png",300,300,60,60);
+block[8] = new Object("block.png",300,140,60,60); // Can jump up to 180 height
+block[9] = new Object("block.png",500,140,60,60);
+block[10] = new Object("block.png",600,200,60,60);
+block[11] = new Object("block.png",700,300,60,60);
+
+block[12] = new Object("block.png",800,400,60,60);
+block[13] = new Object("block.png",900,500,60,60);
+
+block[18] = new Object("block.png",1190,300,60,60);
+block[20] = new Object("block.png",1300,200,60,60);
+block[21] = new Object("block.png",1440,150,60,60);
+block[22] = new Object("block.png",-10,750,60,60);
+block[23] = new Object("block.png",-10,750,60,60);
+block[24] = new Object("block.png",-10,700,60,60);
+block[25] = new Object("block.png",-10,700,60,60);
+block[26] = new Object("block.png",-10,700,60,60);
+block[27] = new Object("block.png",-10,700,60,60);
+block[28] = new Object("block.png",-10,700,60,60);
+block[29] = new Object("block.png",-10,700,60,60);
+block[30] = new Object("block.png",-10,700,60,60);
+
+
+
+
+
+
+
+
+
+lava[1] = new Object("lava.png",800,380,60,60);
+lava[2] = new Object("lava.png",820,380,60,60);
+lava[3] = new Object("lava.png",840,380,60,60);
+lava[4] = new Object("lava.png",860,380,60,60);
+lava[5] = new Object("lava.png",870,380,60,60);
+lava[6] = new Object("lava.png",880,380,60,60);
+lava[7] = new Object("lava.png",890,380,60,60);
+lava[8] = new Object("lava.png",900,380,60,60);
+lava[9] = new Object("lava.png",910,380,60,60);
+lava[10] = new Object("lava.png",920,380,60,60);
+lava[11] = new Object("lava.png",930,380,60,60);
+lava[12] = new Object("lava.png",940,380,60,60);
+lava[13] = new Object("lava.png",950,380,60,60);
+lava[14] = new Object("lava.png",960,380,60,60);
+lava[15] = new Object("lava.png",970,380,60,60);
+lava[16] = new Object("lava.png",980,380,60,60);
+lava[17] = new Object("lava.png",990,380,60,60);
+
+lava[18] = new Object("lava.png",300,290,60,60);
+lava[19] = new Object("lava.png",320,290,60,60);
+lava[20] = new Object("lava.png",340,290,60,60);
+
+lava[21] = new Object("lava.png",200,180,60,60);
+lava[22] = new Object("lava.png",220,180,60,60);
+lava[23] = new Object("lava.png",240,180,60,60);
+
+
+lava[24] = new Object("lava.png",380,20,60,60);
+lava[25] = new Object("lava.png",380,0,60,60);
+lava[26] = new Object("lava.png",380,-20,60,60);
+
+
+
+
+player.Gravity = 40;
+player.Weight = 0.12;
+
+
+function reset(){
+
+
+var loser = false;
+
+var winner = false;
+
+
+var snum = 1;
+var g;
+var number = 0;
+var maxBlocks = 90;
+var lives = 400;
+var maxLava = 26;
+
+var startScreen = true;
+
+
+var block = new Array();
+var lava = new Array();
+
+var win = new Object("win.png",0,0,600,600);
+var welcome = new Object("welcome.jpg",0,0,600,600);
+var background = new Object("background.png",0,0,2800,600);
+var star = new Object("star.png",3000,350,50,50);
+var player = new Object("mario-sprite.png",100,100,40,40);
+var lose = new Object("lose.png",0,0,600,600);
+
+
+
+
+
+for(i=1;i<=maxLava;i++){
+lava[i]=new Object("lava.png",i*20,280,20,20);
+}
+
+
+for(var i=1; i<=maxBlocks; i++){
+	block[i] = new Object("block.png",i*60,400,60,60);
+}
+
+block[6] = new Object("block.png", 200,200,60,60);
+block[7] = new Object("block.png",300,300,60,60);
+block[8] = new Object("block.png",300,140,60,60); // Can jump up to 180 height
+block[9] = new Object("block.png",500,140,60,60);
+block[10] = new Object("block.png",600,200,60,60);
+block[11] = new Object("block.png",700,300,60,60);
+
+block[12] = new Object("block.png",800,400,60,60);
+block[13] = new Object("block.png",900,500,60,60);
+
+block[18] = new Object("block.png",1190,300,60,60);
+block[20] = new Object("block.png",1300,200,60,60);
+block[21] = new Object("block.png",1440,150,60,60);
+block[22] = new Object("block.png",-10,750,60,60);
+block[23] = new Object("block.png",-10,750,60,60);
+block[24] = new Object("block.png",-10,700,60,60);
+block[25] = new Object("block.png",-10,700,60,60);
+block[26] = new Object("block.png",-10,700,60,60);
+block[27] = new Object("block.png",-10,700,60,60);
+block[28] = new Object("block.png",-10,700,60,60);
+
+
+
+
+
+
+lava[1] = new Object("lava.png",800,380,60,60);
+lava[2] = new Object("lava.png",820,380,60,60);
+lava[3] = new Object("lava.png",840,380,60,60);
+lava[4] = new Object("lava.png",860,380,60,60);
+lava[5] = new Object("lava.png",870,380,60,60);
+lava[6] = new Object("lava.png",880,380,60,60);
+lava[7] = new Object("lava.png",890,380,60,60);
+lava[8] = new Object("lava.png",900,380,60,60);
+lava[9] = new Object("lava.png",910,380,60,60);
+lava[10] = new Object("lava.png",920,380,60,60);
+lava[11] = new Object("lava.png",930,380,60,60);
+lava[12] = new Object("lava.png",940,380,60,60);
+lava[13] = new Object("lava.png",950,380,60,60);
+lava[14] = new Object("lava.png",960,380,60,60);
+lava[15] = new Object("lava.png",970,380,60,60);
+lava[16] = new Object("lava.png",980,380,60,60);
+lava[17] = new Object("lava.png",990,380,60,60);
+
+lava[18] = new Object("lava.png",300,290,60,60);
+lava[19] = new Object("lava.png",320,290,60,60);
+lava[20] = new Object("lava.png",340,290,60,60);
+
+lava[21] = new Object("lava.png",200,180,60,60);
+lava[22] = new Object("lava.png",220,180,60,60);
+lava[23] = new Object("lava.png",240,180,60,60);
+
+
+
+lava[24] = new Object("lava.png",380,20,60,60);
+lava[25] = new Object("lava.png",380,0,60,60);
+lava[26] = new Object("lava.png",380,-20,60,60);
+
+
+
+
+
+
+
+}
+
+
+
+
+function getPosition(event){
+var x = event.x;
+  var y = event.y;
+
+
+
+  x -= gameCanvas.offsetLeft;
+  y -= gameCanvas.offsetTop;
+
+if(startScreen){
+	startScreen = false;
+
+	reset();
+}
+if(loser){
+	loser=false;
+	reset();
+	}
+
+  
+  
+}
+
+//Events
+function keyDown(e){
+	if(String.fromCharCode(e.keyCode)=="%"){ isLeft=true; }
+	if(String.fromCharCode(e.keyCode)=="'"){ isRight=true; }
+	if(String.fromCharCode(e.keyCode)==" "){ isSpace=true; }
+	
+}
+function keyUp(e){
+	if(String.fromCharCode(e.keyCode)=="'"){ isRight = false; }
+	if(String.fromCharCode(e.keyCode)=="%"){ isLeft=false; }
+	if(String.fromCharCode(e.keyCode)==" "){ isSpace=false; }
+	
+}
+
+
+
+
+ soundEfx.play();
+MainLoop();//Main loop
+function MainLoop(){
+
+//Pre Varriable Adjustments
+
+
+
+
+//Logic
+if(isLeft) player.Velocity_X = -3;
+if(isRight) player.Velocity_X = 3;
+if(!isLeft && !isRight ) player.Velocity_X = 0;
+
+
+lava[24].Velocity_Y=5;
+lava[25].Velocity_Y=5;
+lava[26].Velocity_Y=5;
+
+
+lava[24].y+=lava[24].Velocity_Y;
+lava[25].y+=lava[25].Velocity_Y;
+lava[26].y+=lava[26].Velocity_Y;
+
+if(lava[24].y==240){
+lava[24].y=20;
+lava[25].y=0;
+lava[26].y=-20;
+}
+
+
+//LoseWin
+
+
+
+
+
+
+
+//Life
+if(player.y>=600){
+lives=0;
+}
+
+if(lives<=0){
+
+//start reset
+
+reset();
+loser=true;
+
+//end reset
+
+}
+
+
+
+for(var i=1;i<=maxLava;i++){
+	if(player.isColliding(lava[i])){
+	lives--;
+	}
+}
+
+var i = 1; //Scrolling
+while(i <= maxBlocks && player.Previous_X >= 200 ){
+block[i].x -= player.Velocity_X;
+player.Previous_X += player.Velocity_X;
+i++;
+}
+
+if(player.Previous_X >=200){
+for(var gg=1;gg<=maxLava;gg++){
+lava[gg].x -= player.Velocity_X;
+}
+}
+
+star.x -= player.Velocity_X;
+
+
+
+if(player.Previous_X <=199){
+player.Previous_X += player.Velocity_X;
+player.x += player.Velocity_X;
+}
+
+
+//for(var i = 1; i<=maxBlocks; i++){ block[i].y -= player.Velocity_Y;}
+
+
+player.y += player.Velocity_Y;
+player.Previous_Y += player.Velocity_Y;
+
+background.x -= player.Velocity_X;
+if(player.Previous_X <=199){
+background.x = 0;
+
+}
+
+
+
+
+
+
+
+
+
+if(player.Velocity_Y < player.Gravity) player.Velocity_Y += player.Weight;
+//player.y + player.height < block.Y + player.Velocity_Y ::: Checks if player touched top
+// Collision code
+
+//if(player.isColliding(block) && player.y + player.height < block.y + player.Velocity_Y){
+//player.Velocity_Y = 0; // Collision
+//player.y = block.y - player.height;
+//}
+
+for(var i = 1; i <= maxBlocks; i++)
+	if(player.isColliding(block[i]) && player.y + player.height < block[i].y + player.Velocity_Y){
+	
+	if(BounceCount<2){
+	player.Velocity_Y *=-1;
+	player.Velocity_Y /=3;
+	BounceCount++;
+	
+	BounceCount++;
+	}else{
+	player.Velocity_Y = 0; // Collision
+	player.y = block[i].y - player.height;
+}
+	
+	
+	
+	
+}
+
+if(player.isColliding(star)){
+winner=true;
+
+}
+
+if(isSpace && player.Velocity_Y == 0){
+player.Velocity_Y = -5;
+BounceCount=0;
+}
+
+//Post Varriable Adjustment
+
+
+
+
+
+//Rendering
+grafx.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+grafx.drawImage(background.Sprite,background.x,background.y);
+
+for(i=1;i<=maxLava;i++){
+grafx.drawImage(lava[i].Sprite,lava[i].x,lava[i].y);
+}
+
+grafx.font = "30px Arial";
+
+grafx.fillText("You have "+lives,10,50);
+/*grafx.fillText("player.Previous_X "+player.Previous_X,10,100);*/
+
+
+
+
+if(player.Velocity_X < 0){
+grafx.drawImage(
+           player.Sprite,
+           80,
+           0,
+           player.width,
+           player.height,
+           player.x,
+           player.y,
+           player.width,
+           player.height);
+}
+if(player.Velocity_X >= 0){
+grafx.drawImage(
+           player.Sprite,
+           0,
+           0,
+           player.width,
+           player.height,
+           player.x,
+           player.y,
+           player.width,
+           player.height);
+}
+
+
+for(var i = 1; i<= maxBlocks ; i++){
+grafx.drawImage(block[i].Sprite,block[i].x,block[i].y);
+}
+grafx.drawImage(star.Sprite,star.x,star.y);
+if(startScreen){
+grafx.drawImage(welcome.Sprite,welcome.x,welcome.y);
+}
+if(loser){
+grafx.drawImage(lose.Sprite,lose.x,lose.y);
+}
+if(winner){
+grafx.drawImage(win.Sprite,win.x,win.y);
+}
+
+
+
+
+
+
+setTimeout(MainLoop,1000/fps);
+}
+
+function Object(img,x,y,width, height){
+this.Sprite = new Image();
+this.Sprite.src=img;
+this.x=x;
+this.y=y;
+this.width=width;
+this.height=height;
+this.Previous_X=x;
+this.Previous_Y=y;
+this.Velocity_X=0;
+this.Velocity_Y=0;
+this.Gravity = 0;
+this.Weight = 0;
+
+
+
+
+this.isColliding = function(obj){
+		if(this.x>obj.x+obj.width) return false; // Not Touching Left or right
+		if(this.x + this.width < obj.x) return false; // Not Touching Right or left
+		if(this.y>obj.y+obj.height) return false; // Not TOuching Top or bot
+		if(this.y + this.height < obj.y) return false; // Not Touching Bottom or bot
+		return true;
+	}
+
+}
+
+
+
+/*
+parameters to the draw function in order
+context.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+
+img	Source image object	Sprite sheet
+sx	Source x	Frame index times frame width
+sy	Source y	0
+sw	Source width	Frame width
+sh	Source height	Frame height
+dx	Destination x	0
+dy	Destination y	0
+dw	Destination width	Frame width
+dh	Destination height	Frame height
+
+
+*/
+//Sprite animation tutorial: http://www.williammalone.com/articles/create-html5-canvas-javascript-sprite-animation/
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
