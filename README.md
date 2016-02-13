@@ -1,1 +1,2 @@
 # BasicMario
+A game I wrote back in 2013 which is similar to mario. A game created within a week, offers some basic game features such as scroller action, lives, and even bouncing :). If I get enough time, I will continue to upgrade the game as I have learned an immense amount more about both Javascript and programming algorithems in general as the years passed by whenever I have the time to do so.
